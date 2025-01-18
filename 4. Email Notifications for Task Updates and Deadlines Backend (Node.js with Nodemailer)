@@ -1,0 +1,31 @@
+const nodemailer = require('nodemailer');
+
+// Create reusable transporter object
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'your-email@gmail.com',
+    pass: 'your-email-password'
+  }
+});
+
+// Send email notification
+const sendEmail = (email, subject, text) => {
+  const mailOptions = {
+    from: 'your-email@gmail.com',
+    to: email,
+    subject,
+    text
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+};
+
+// Example usage
+sendEmail('user@example.com', 'Task Deadline Reminder', 'Your task is due soon!');
