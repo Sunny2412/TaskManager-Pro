@@ -1,0 +1,21 @@
+// TaskAssign.js
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const TaskAssign = ({ taskId }) => {
+  const [userId, setUserId] = useState('');
+
+  const handleAssign = async () => {
+    await axios.put(`http://localhost:5000/tasks/assign/${taskId}`, { userId });
+    alert('Task assigned');
+  };
+
+  return (
+    <div>
+      <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} placeholder="User ID" />
+      <button onClick={handleAssign}>Assign Task</button>
+    </div>
+  );
+};
+
+export default TaskAssign;
