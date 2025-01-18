@@ -1,0 +1,46 @@
+// Task model (task.js)
+const mongoose = require('mongoose');
+
+const taskSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String },
+  status: { type: String, default: 'pending' },
+  assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  dueDate: { type: Date }
+});
+
+const Task = mongoose.model('Task', taskSchema);
+module.exports = Task;
+
+// Task routes (taskRoutes.js)
+const express = require('express');
+const Task = require('./models/Task');
+const router = express.Router();
+
+// Create task
+router.post('/tasks', async (req, res) => {
+  const { title, description, assignedTo, dueDate } = req.body;
+  const newTask = new Task({ title, description, assignedTo, dueDate });
+  await newTask.save();
+  res.status(201).json(newTask);
+});
+
+// Get tasks
+router.get('/tasks', async (req, res) => {
+  const tasks = await Task.find();
+  res.json(tasks);
+});
+
+// Update task
+router.put('/tasks/:id', async (req, res) => {
+  const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  res.json(task);
+});
+
+// Delete task
+router.delete('/tasks/:id', async (req, res) => {
+  await Task.findByIdAndDelete(req.params.id);
+  res.json({ message: 'Task deleted' });
+});
+
+module.exports = router;
