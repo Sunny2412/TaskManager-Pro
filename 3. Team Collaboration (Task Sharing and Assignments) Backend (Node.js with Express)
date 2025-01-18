@@ -1,0 +1,6 @@
+// Assign task to user
+router.put('/tasks/assign/:taskId', async (req, res) => {
+  const { userId } = req.body;
+  const task = await Task.findByIdAndUpdate(req.params.taskId, { assignedTo: userId }, { new: true });
+  res.json(task);
+});
